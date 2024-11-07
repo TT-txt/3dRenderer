@@ -26,3 +26,71 @@ vec3_t rotateZ(vec3_t p, float a) {
     };
     return r;
 }
+
+/* --- VEC 2 UTILS --- */
+float vec2Length(vec2_t v) {
+    float r = sqrt(pow(v.x, 2) + pow(v.y, 2));
+    return r;
+}
+
+vec2_t vec2Add(vec2_t a, vec2_t b) {
+    float x = a.x + b.x;
+    float y = a.y + b.y;
+    vec2_t r = {.x = x, .y = y};
+    return r;
+}
+
+vec2_t vec2Sub(vec2_t a, vec2_t b) {
+    float x = a.x - b.x;
+    float y = a.y - b.y;
+    vec2_t r = {.x = x, .y = y};
+    return r;
+}
+
+vec2_t vec2Mul(vec2_t v, float sc) {
+    v.x *= sc;
+    v.y *= sc;
+    return v;
+}
+
+vec2_t vec2Div(vec2_t v, float sc) {
+    v.x /= sc;
+    v.y /= sc;
+    return v;
+}
+
+/* --- VEC3 UTILS --- */
+float vec3Length(vec3_t v) {
+    float r = sqrt(pow(v.x, 2) + pow(v.y, 2) + pow(v.z, 2));
+    return r;
+}
+
+vec3_t vec3Add(vec3_t a, vec3_t b) {
+    float x = a.x + b.x;
+    float y = a.y + b.y;
+    float z = a.z + b.z;
+    vec3_t r = {.x = x, .y = y, .z = z};
+    return r;
+}
+
+vec3_t vec3Sub(vec3_t a, vec3_t b) {
+    float x = a.x - b.x;
+    float y = a.y - b.y;
+    float z = a.z - a.z;
+    vec3_t r = {.x = x, .y = y, .z = z};
+    return r;
+}
+
+vec3_t vec3Mul(vec3_t v, float sc) {
+    v.x *= sc;
+    v.y *= sc;
+    v.z *= sc;
+    return v;
+}
+
+vec3_t vec3Div(vec3_t v, float sc) {
+    v.x /= sc;
+    v.y /= sc;
+    v.z /= sc;
+    return v;
+}

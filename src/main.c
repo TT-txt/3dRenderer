@@ -32,9 +32,10 @@ void setup(void) {
         isRunning = false;
     }
    
+    //TODO: remove the og cube things
     //loadCube();
     loadObj("assets/f22.obj");
-
+    //loadObj("assets/cube.obj");
 }
 
 void processInputs(void) {

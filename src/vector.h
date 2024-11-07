@@ -18,4 +18,17 @@ vec3_t rotateX(vec3_t p, float a);
 vec3_t rotateY(vec3_t p, float a);
 vec3_t rotateZ(vec3_t p, float a);
 
+/* --- VEC2 Utils --- */
+float vec2Length(vec2_t v);
+vec2_t vec2Add(vec2_t a, vec2_t b);
+vec2_t vec2Sub(vec2_t a, vec2_t b);
+vec2_t vec2Mul(vec2_t v, float sc);
+vec2_t vec2Div(vec2_t v, float sc);
+
+/* --- VEC3 Utils  --- */
+float vec3Length(vec3_t v);
+vec3_t vec3Add(vec3_t a, vec3_t b);
+vec3_t vec3Sub(vec3_t a, vec3_t b);
+vec3_t vec3Mul(vec3_t v, float sc);
+vec3_t vec3Div(vec3_t v, float sc);
 #endif
