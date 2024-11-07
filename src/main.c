@@ -32,7 +32,8 @@ void setup(void) {
         isRunning = false;
     }
    
-    loadCube();
+    //loadCube();
+    loadObj("assets/f22.obj");
 
 }
 

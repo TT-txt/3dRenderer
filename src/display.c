@@ -60,7 +60,6 @@ void destroyWindow(void) {
 }
 
 void drawGrid(void) {
-    //Draw a grid
     for (unsigned int y = 0; y < windowY; y+=10) {
         for (unsigned int x = 0; x < windowX; x+=10) {
             colorBuffer[y * windowX + x] = 0xFFFFFFFF;
