@@ -38,7 +38,8 @@ void setup(void) {
     }
    
     //loadObj("assets/f22.obj");
-    loadObj("assets/cube.obj");
+    //loadObj("assets/cube.obj");
+    loadObj("assets/cow.obj");
 }
 
 void processInputs(void) {
@@ -99,7 +100,7 @@ void update(void) {
             curr = rotateY(curr, mesh.rotation.y);
             curr = rotateZ(curr, mesh.rotation.z);
             
-            curr.z += 5;
+            curr.z += 25;
 
             transformedVertices[j] = curr;
         }
