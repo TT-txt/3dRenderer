@@ -5,8 +5,10 @@
 #include "mesh.h"
 #include "triangle.h"
 
-//if this is set to 0, the renderer won't do any back face culling
+//if this is set to 1, the renderer won't do any back face culling
 #define WIREFRAME 0
+//reverse culling cause why not ?
+#define CULLED_ONLY 0
 
 triangle_t *trianglesToRender = NULL;
 
@@ -35,10 +37,8 @@ void setup(void) {
         isRunning = false;
     }
    
-    //TODO: remove the og cube things
-    //loadCube();
-    loadObj("assets/f22.obj");
-    //loadObj("assets/cube.obj");
+    //loadObj("assets/f22.obj");
+    loadObj("assets/cube.obj");
 }
 
 void processInputs(void) {
@@ -111,7 +111,7 @@ void update(void) {
             vec3_t camRay = vec3Sub(camPosition, transformedVertices[0]);
             vec3_t normal = vec3Cross(AB, AC); //if right handed, should be the opposite
             float dotProductResult = vec3Dot(normal, camRay);
-            if (dotProductResult < 0) {
+            if ((dotProductResult < 0 && !CULLED_ONLY) || (CULLED_ONLY && dotProductResult >= 0)) {
                 //face is culled, looking back, hidden to camera
                 continue;
             }
