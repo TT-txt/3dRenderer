@@ -38,8 +38,8 @@ void setup(void) {
     }
    
     //loadObj("assets/f22.obj");
-    //loadObj("assets/cube.obj");
-    loadObj("assets/cow.obj");
+    loadObj("assets/cube.obj");
+    //loadObj("assets/cow.obj");
 }
 
 void processInputs(void) {
@@ -100,7 +100,7 @@ void update(void) {
             curr = rotateY(curr, mesh.rotation.y);
             curr = rotateZ(curr, mesh.rotation.z);
             
-            curr.z += 25;
+            curr.z += 10;
 
             transformedVertices[j] = curr;
         }
@@ -110,7 +110,10 @@ void update(void) {
             vec3_t AB = vec3Sub(transformedVertices[1], transformedVertices[0]);
             vec3_t AC = vec3Sub(transformedVertices[2], transformedVertices[0]);
             vec3_t camRay = vec3Sub(camPosition, transformedVertices[0]);
+            vec3Normalize(&AB);
+            vec3Normalize(&AC);
             vec3_t normal = vec3Cross(AB, AC); //if right handed, should be the opposite
+            vec3Normalize(&normal);
             float dotProductResult = vec3Dot(normal, camRay);
             if ((dotProductResult < 0 && !CULLED_ONLY) || (CULLED_ONLY && dotProductResult >= 0)) {
                 //face is culled, looking back, hidden to camera

@@ -63,6 +63,11 @@ float vec2Dot(vec2_t a, vec2_t b) {
     return a.x * b.x + a.y + b.y; 
 }
 
+void vec2Normalize(vec2_t *a) {
+    float length = vec2Length(*a);
+    *a = vec2Div(*a, length);
+}
+
 /* --- VEC3 UTILS --- */
 float vec3Length(vec3_t v) {
     float r = sqrt(pow(v.x, 2) + pow(v.y, 2) + pow(v.z, 2));
@@ -109,4 +114,9 @@ vec3_t vec3Cross(vec3_t a, vec3_t b) {
 
 float vec3Dot(vec3_t a, vec3_t b) {
     return a.x * b.x + a.y * b.y + a.z * b.z;
+}
+
+void vec3Normalize(vec3_t *a) {
+    float length = vec3Length(*a);
+    *a = vec3Div(*a, length);
 }
