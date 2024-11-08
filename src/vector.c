@@ -80,7 +80,7 @@ vec3_t vec3Add(vec3_t a, vec3_t b) {
 vec3_t vec3Sub(vec3_t a, vec3_t b) {
     float x = a.x - b.x;
     float y = a.y - b.y;
-    float z = a.z - a.z;
+    float z = a.z - b.z;
     vec3_t r = {.x = x, .y = y, .z = z};
     return r;
 }

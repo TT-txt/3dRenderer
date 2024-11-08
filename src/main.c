@@ -5,9 +5,12 @@
 #include "mesh.h"
 #include "triangle.h"
 
-triangle_t *trianglesToRender;
+//if this is set to 0, the renderer won't do any back face culling
+#define WIREFRAME 0
 
-vec3_t camPosition = {.x = 0, .y = 0, .z = -5 };
+triangle_t *trianglesToRender = NULL;
+
+vec3_t camPosition = {.x = 0, .y = 0, .z = 0 };
 float fovFactor = 640;
 
 bool isRunning = false;
@@ -78,14 +81,17 @@ void update(void) {
 
     trianglesToRender = NULL;
     int faces = arrayLength(mesh.faces);
+
     for (unsigned int i = 0; i < faces; ++i) {
         face_t currentFace = mesh.faces[i];
         vec3_t faceVertices[3];
         faceVertices[0] = mesh.vertices[currentFace.a - 1]; // compensating the init 1;
         faceVertices[1] = mesh.vertices[currentFace.b - 1];
         faceVertices[2] = mesh.vertices[currentFace.c - 1];
-        triangle_t currentTriangle;
 
+        vec3_t transformedVertices[3];
+        
+        //TRANSFORMATION LOOP
         for (unsigned int j = 0; j < 3; ++j) {
             vec3_t curr = faceVertices[j];
 
@@ -93,14 +99,33 @@ void update(void) {
             curr = rotateY(curr, mesh.rotation.y);
             curr = rotateZ(curr, mesh.rotation.z);
             
-            curr.z -= camPosition.z;
+            curr.z += 5;
 
-            vec2_t projectedPoint = project(curr);
+            transformedVertices[j] = curr;
+        }
+
+       if (!WIREFRAME) { 
+            //check if back is culled
+            vec3_t AB = vec3Sub(transformedVertices[1], transformedVertices[0]);
+            vec3_t AC = vec3Sub(transformedVertices[2], transformedVertices[0]);
+            vec3_t camRay = vec3Sub(camPosition, transformedVertices[0]);
+            vec3_t normal = vec3Cross(AB, AC); //if right handed, should be the opposite
+            float dotProductResult = vec3Dot(normal, camRay);
+            if (dotProductResult < 0) {
+                //face is culled, looking back, hidden to camera
+                continue;
+            }
+        }
+
+        triangle_t currentTriangle;
+        for (unsigned int j = 0; j < 3; ++j) {
+            vec2_t projectedPoint = project(transformedVertices[j]);
             projectedPoint.x += (windowX / 2);
             projectedPoint.y += (windowY / 2);
              
-        currentTriangle.points[j] = projectedPoint;
+            currentTriangle.points[j] = projectedPoint;
         }
+
         arrayPush(trianglesToRender, currentTriangle);
     }
 }
