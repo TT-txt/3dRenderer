@@ -59,6 +59,10 @@ vec2_t vec2Div(vec2_t v, float sc) {
     return v;
 }
 
+float vec2Dot(vec2_t a, vec2_t b) {
+    return a.x * b.x + a.y + b.y; 
+}
+
 /* --- VEC3 UTILS --- */
 float vec3Length(vec3_t v) {
     float r = sqrt(pow(v.x, 2) + pow(v.y, 2) + pow(v.z, 2));
@@ -93,4 +97,16 @@ vec3_t vec3Div(vec3_t v, float sc) {
     v.y /= sc;
     v.z /= sc;
     return v;
+}
+
+vec3_t vec3Cross(vec3_t a, vec3_t b) {
+    float x = a.y * b.z - a.z * b.y;
+    float y = a.z * b.x - a.x * b.z;
+    float z = a.x * b.y - a.y * b.x;
+    vec3_t r = {.x = x, .y = y, .z = z};
+    return r; 
+}
+
+float vec3Dot(vec3_t a, vec3_t b) {
+    return a.x * b.x + a.y * b.y + a.z * b.z;
 }
