@@ -1,6 +1,5 @@
 # 3D Renderer from Scratch in C with SDL2
 ![f22 spinning](img/f22.gif)
-![cube spinning](img/cube.gif)
 This project is a custom-built 3D renderer written in C, using SDL2 for the GUI interface and developed from scratch. It utilizes a left-handed coordinate system and is designed with a focus on understanding 3D graphics fundamentals. This project follows along with the **Pikuma** course, while implementing my own coding style and ideas, as the course encourages.
 
 ## Features
@@ -48,3 +47,5 @@ After building, run the executable:
 ## Acknowledgments
 - **Pikuma's course**:  This project was inspired by and developed following the Pikuma course on 3D graphics, adapted to my own coding style and approaches as encouraged by the course materials.
 - **SLD**: A lightweight, cross-platform library for handling media and graphics, which powers the GUI in this project.
+---
+![cube spinning](img/cube.gif)
