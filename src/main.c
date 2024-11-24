@@ -164,7 +164,7 @@ void render(void) {
         //points
         for (unsigned int j = 0; j < 3; ++j) {
             vec2_t current = currentFace.points[j];
-            drawRectangle(current.x, current.y, 4, 4, 0xFF00FF00);
+            drawRectangle(current.x, current.y, 4, 4, 0xFFFFDE21);
         }
     }
     arrayFree(trianglesToRender);

@@ -1,5 +1,5 @@
 # 3D Renderer from Scratch in C with SDL2
-![f22 spinning](img/f22.gif)
+![cube spinning](img/cube.gif)
 This project is a custom-built 3D renderer written in C, using SDL2 for the GUI interface and developed from scratch. It utilizes a left-handed coordinate system and is designed with a focus on understanding 3D graphics fundamentals. This project follows along with the **Pikuma** course, while implementing my own coding style and ideas, as the course encourages.
 
 ## Features
@@ -9,7 +9,7 @@ This project is a custom-built 3D renderer written in C, using SDL2 for the GUI 
   - Draws lines, rectangles, and triangles to construct 3D objects on the screen.
 - **OBJ File Loading**: Imports `.obj` 3D model files to render complex geometries.
 - **Back-Face Culling**: Uses a basic back-face culling algorithm to optimize rendering by skipping faces that are not visible to the camera.
-- **Triangle Rasterization** *(in progress)*: Currently implementing rasterization to accurately fill in triangles for solid object rendering.
+- **Triangle Rasterization** *(done, but currently in tweaking)*: rasterization to accurately fill in triangles for solid object rendering.
 
 ## Getting Started
 
@@ -48,4 +48,4 @@ After building, run the executable:
 - **Pikuma's course**:  This project was inspired by and developed following the Pikuma course on 3D graphics, adapted to my own coding style and approaches as encouraged by the course materials.
 - **SLD**: A lightweight, cross-platform library for handling media and graphics, which powers the GUI in this project.
 ---
-![cube spinning](img/cube.gif)
+![f22 spinning](img/f22.gif)
