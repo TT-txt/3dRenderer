@@ -100,7 +100,7 @@ void update(void) {
             curr = rotateY(curr, mesh.rotation.y);
             curr = rotateZ(curr, mesh.rotation.z);
             
-            curr.z += 10;
+            curr.z += 5;
 
             transformedVertices[j] = curr;
         }
@@ -141,6 +141,17 @@ void render(void) {
     int trianglesNb = arrayLength(trianglesToRender);
     for (unsigned int i = 0; i < trianglesNb; ++i) {
         triangle_t currentFace = trianglesToRender[i];
+        //fill
+        drawFilledTriangle(
+            currentFace.points[0].x,
+            currentFace.points[0].y,
+            currentFace.points[1].x,
+            currentFace.points[1].y,
+            currentFace.points[2].x,
+            currentFace.points[2].y,
+            0xFF00FF00
+        );
+        //outline
         drawTriangle(
             currentFace.points[0].x,
             currentFace.points[0].y,
@@ -148,11 +159,12 @@ void render(void) {
             currentFace.points[1].y,
             currentFace.points[2].x,
             currentFace.points[2].y,
-            0xFFABC000
+            0xFF000000
         );
+        //points
         for (unsigned int j = 0; j < 3; ++j) {
             vec2_t current = currentFace.points[j];
-            drawRectangle(current.x, current.y, 4, 4, 0xFFFFFF00);
+            drawRectangle(current.x, current.y, 4, 4, 0xFF00FF00);
         }
     }
     arrayFree(trianglesToRender);
