@@ -11,6 +11,15 @@ This project is a custom-built 3D renderer written in C, using SDL2 for the GUI 
 - **Back-Face Culling**: Uses a basic back-face culling algorithm to optimize rendering by skipping faces that are not visible to the camera.
 - **Triangle Rasterization** *(done, but currently in tweaking)*: rasterization to accurately fill in triangles for solid object rendering.
 
+## Keyboards inputs (WIP)
+- Pressing “1” displays the wireframe and a small red dot for each triangle vertex
+- Pressing “2” displays only the wireframe lines
+- Pressing “3” displays filled triangles with a solid color
+- Pressing “4” displays both filled triangles and wireframe lines
+- Pressing “c” we should enable back-face culling
+- Pressing “d” we should disable the back-face culling
+This might be changed later on for better features.
+
 ## Getting Started
 
 ### Prerequisites

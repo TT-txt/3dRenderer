@@ -5,10 +5,20 @@
 #include "mesh.h"
 #include "triangle.h"
 
-//if this is set to 1, the renderer won't do any back face culling
-#define WIREFRAME 0
-//reverse culling cause why not ?
-#define CULLED_ONLY 0
+//user options
+bool DISPLAY_WIREFRAME = true;
+bool DISPLAY_FACES = true;
+bool DISPLAY_VERTICES = true;
+bool ENABLE_CULLING = true;
+//needs culling enabled to show those
+bool ONLY_DISPLAY_CULLED_FACES = false;
+bool DISPLAY_GRID = true;
+
+//COLORS
+uint32_t verticesColor = 0xFFFFDE21;
+uint32_t wireframeColor = 0xFFFFFFFF;
+uint32_t facesColor = 0xFF00FF00;
+
 
 triangle_t *trianglesToRender = NULL;
 
@@ -52,8 +62,30 @@ void processInputs(void) {
             isRunning = false;
             break;
         case SDL_KEYDOWN:
-            if (event.key.keysym.sym == SDLK_ESCAPE) {
+            SDL_Keycode keyPressed = event.key.keysym.sym;
+            if (keyPressed == SDLK_ESCAPE) {
                 isRunning = false;
+            } else if (keyPressed == SDLK_1) {
+                DISPLAY_WIREFRAME = true;
+                DISPLAY_VERTICES = true;
+                verticesColor = 0xFFFF0000;
+                DISPLAY_FACES = false;
+            } else if (keyPressed == SDLK_2) {
+                DISPLAY_WIREFRAME = true;
+                DISPLAY_VERTICES = false;
+                DISPLAY_FACES = false;
+            } else if (keyPressed == SDLK_3) {
+                DISPLAY_WIREFRAME = false;
+                DISPLAY_VERTICES = false;
+                DISPLAY_FACES = true;
+            } else if (keyPressed == SDLK_4) {
+                DISPLAY_WIREFRAME = true;
+                DISPLAY_FACES = true;
+                DISPLAY_VERTICES = false;
+            } else if (keyPressed == SDLK_c) {
+                ENABLE_CULLING = true;
+            } else if (keyPressed == SDLK_d) {
+                ENABLE_CULLING = false;
             }
             break;
     }
@@ -105,7 +137,7 @@ void update(void) {
             transformedVertices[j] = curr;
         }
 
-       if (!WIREFRAME) { 
+       if (ENABLE_CULLING) { 
             //check if back is culled
             vec3_t AB = vec3Sub(transformedVertices[1], transformedVertices[0]);
             vec3_t AC = vec3Sub(transformedVertices[2], transformedVertices[0]);
@@ -115,7 +147,7 @@ void update(void) {
             vec3_t normal = vec3Cross(AB, AC); //if right handed, should be the opposite
             vec3Normalize(&normal);
             float dotProductResult = vec3Dot(normal, camRay);
-            if ((dotProductResult < 0 && !CULLED_ONLY) || (CULLED_ONLY && dotProductResult >= 0)) {
+            if ((dotProductResult < 0 && !ONLY_DISPLAY_CULLED_FACES) || (ONLY_DISPLAY_CULLED_FACES && dotProductResult >= 0)) {
                 //face is culled, looking back, hidden to camera
                 continue;
             }
@@ -141,30 +173,38 @@ void render(void) {
     int trianglesNb = arrayLength(trianglesToRender);
     for (unsigned int i = 0; i < trianglesNb; ++i) {
         triangle_t currentFace = trianglesToRender[i];
-        //fill
-        drawFilledTriangle(
-            currentFace.points[0].x,
-            currentFace.points[0].y,
-            currentFace.points[1].x,
-            currentFace.points[1].y,
-            currentFace.points[2].x,
-            currentFace.points[2].y,
-            0xFF00FF00
-        );
-        //outline
-        drawTriangle(
-            currentFace.points[0].x,
-            currentFace.points[0].y,
-            currentFace.points[1].x,
-            currentFace.points[1].y,
-            currentFace.points[2].x,
-            currentFace.points[2].y,
-            0xFF000000
-        );
-        //points
-        for (unsigned int j = 0; j < 3; ++j) {
-            vec2_t current = currentFace.points[j];
-            drawRectangle(current.x, current.y, 4, 4, 0xFFFFDE21);
+        if (DISPLAY_FACES) {
+            //fill
+            drawFilledTriangle(
+                currentFace.points[0].x,
+                currentFace.points[0].y,
+                currentFace.points[1].x,
+                currentFace.points[1].y,
+                currentFace.points[2].x,
+                currentFace.points[2].y,
+                facesColor
+            );
+        }
+
+        if (DISPLAY_WIREFRAME) {
+            //outline
+            drawTriangle(
+                currentFace.points[0].x,
+                currentFace.points[0].y,
+                currentFace.points[1].x,
+                currentFace.points[1].y,
+                currentFace.points[2].x,
+                currentFace.points[2].y,
+                wireframeColor
+            );
+        }
+
+        if (DISPLAY_VERTICES) {
+            //points
+            for (unsigned int j = 0; j < 3; ++j) {
+                vec2_t current = currentFace.points[j];
+                drawRectangle(current.x, current.y, 4, 4, verticesColor);
+            }
         }
     }
     arrayFree(trianglesToRender);
