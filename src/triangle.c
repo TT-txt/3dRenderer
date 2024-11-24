@@ -46,10 +46,20 @@ void drawFilledTriangle(int x0, int y0, int x1, int y1, int x2, int y2, uint32_t
         intSwap(&x0, &x1);
         intSwap(&y0, &y1);
     }
-    //finding middle position
-    my = y1;
-    mx = ((float)((x2 - x0) * (y1 - y0)) / (float)(y2 - y0)) + x0; //Thales magic
-    //drawing flat bottom
-    fillFlatBottomTriangle(x0, y0, x1, y1, mx, my, color);
-    fillFlatTopTriangle(x1, y1, mx, my, x2, y2, color);
+
+    //checks to avoid 0 division
+    if (y1 == y2) {
+        //only a flat bottom
+        fillFlatBottomTriangle(x0, y0, x1, y1, x2, y2, color);
+    } else if (y0 == y1) {
+        //only a flat top
+        fillFlatTopTriangle(x1, y1, x1, y1, x2, y2, color);
+    } else {
+        //finding middle position
+        my = y1;
+        mx = ((float)((x2 - x0) * (y1 - y0)) / (float)(y2 - y0)) + x0; //Thales magic
+        //drawing flat bottom
+        fillFlatBottomTriangle(x0, y0, x1, y1, mx, my, color);
+        fillFlatTopTriangle(x1, y1, mx, my, x2, y2, color);
+    }
 }
