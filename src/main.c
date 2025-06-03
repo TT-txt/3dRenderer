@@ -17,8 +17,6 @@ bool DISPLAY_GRID = true;
 //COLORS
 uint32_t verticesColor = 0xFFFFDE21;
 uint32_t wireframeColor = 0xFFFFFFFF;
-uint32_t facesColor = 0xFF00FF00;
-
 
 triangle_t *trianglesToRender = NULL;
 
@@ -147,22 +145,41 @@ void update(void) {
             vec3_t normal = vec3Cross(AB, AC); //if right handed, should be the opposite
             vec3Normalize(&normal);
             float dotProductResult = vec3Dot(normal, camRay);
-            if ((dotProductResult < 0 && !ONLY_DISPLAY_CULLED_FACES) || (ONLY_DISPLAY_CULLED_FACES && dotProductResult >= 0)) {
+            if ((dotProductResult < 0 && !ONLY_DISPLAY_CULLED_FACES) ||
+                    (ONLY_DISPLAY_CULLED_FACES && dotProductResult >= 0)) {
                 //face is culled, looking back, hidden to camera
                 continue;
             }
         }
 
         triangle_t currentTriangle;
+        currentTriangle.averageDepth = 0;
         for (unsigned int j = 0; j < 3; ++j) {
             vec2_t projectedPoint = project(transformedVertices[j]);
             projectedPoint.x += (windowX / 2);
             projectedPoint.y += (windowY / 2);
              
             currentTriangle.points[j] = projectedPoint;
+            currentTriangle.averageDepth += transformedVertices[j].z;
         }
-
+        currentTriangle.averageDepth /= 3.0;
+        currentTriangle.color = currentFace.color;
         arrayPush(trianglesToRender, currentTriangle);
+    }
+
+    int size = arrayLength(trianglesToRender);
+    bool sorted = false;
+    for (int j = size - 1; j > 0 && !sorted; --j) {
+        sorted = true;
+        for (int k = 0; k < j; ++k) {
+            if (trianglesToRender[k].averageDepth < trianglesToRender[k + 1].averageDepth) {
+                triangle_t temp = trianglesToRender[k];
+                trianglesToRender[k] = trianglesToRender[k + 1];
+                trianglesToRender[k + 1] = temp;
+
+                sorted = false;
+            }
+        }
     }
 }
 
@@ -171,6 +188,7 @@ void render(void) {
 
     //loop all projected and draw rect at pos
     int trianglesNb = arrayLength(trianglesToRender);
+    //we need to sort the faces by z value, painter's algo
     for (unsigned int i = 0; i < trianglesNb; ++i) {
         triangle_t currentFace = trianglesToRender[i];
         if (DISPLAY_FACES) {
@@ -182,7 +200,7 @@ void render(void) {
                 currentFace.points[1].y,
                 currentFace.points[2].x,
                 currentFace.points[2].y,
-                facesColor
+                currentFace.color
             );
         }
 

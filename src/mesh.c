@@ -2,6 +2,7 @@
 #include "array.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <string.h>
 
 mesh_t mesh = {
@@ -9,6 +10,16 @@ mesh_t mesh = {
     .faces = NULL,
     .rotation = { 0, 0, 0}
 };
+
+Color getRandomColor() {
+    // Seed once at program start if needed
+    static int seeded = 0;
+    if (!seeded) {
+        srand((unsigned int)time(NULL));
+        seeded = 1;
+    }
+    return (Color)(rand() % COLOR_COUNT);
+}
 
 /* --- IMPORTANT NOTICE ---
  * This is based on triangles faces.
@@ -47,7 +58,8 @@ void loadObj(char *fileName) {
             face_t face = {
                 .a = vertexIndices[0],
                 .b = vertexIndices[1],
-                .c = vertexIndices[2]
+                .c = vertexIndices[2],
+                .color = getRandomColor()
             };
             arrayPush(mesh.faces, face);
         }
