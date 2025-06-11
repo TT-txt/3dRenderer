@@ -120,3 +120,25 @@ void vec3Normalize(vec3_t *a) {
     float length = vec3Length(*a);
     *a = vec3Div(*a, length);
 }
+
+
+//VEC 4
+vec4_t vec3ToVec4(vec3_t v){
+    vec4_t res = {
+        .x = v.x,
+        .y = v.y,
+        .z = v.z,
+        .w = 1
+    };
+    return res;
+}
+
+
+vec3_t vec4ToVec3(vec4_t v) {
+    vec3_t res = {
+        .x = v.x,
+        .y = v.y,
+        .z = v.z
+    };
+    return res;
+}

@@ -4,6 +4,7 @@
 #include "vector.h"
 #include "mesh.h"
 #include "triangle.h"
+#include "matrix.h"
 
 //user options
 bool DISPLAY_WIREFRAME = true;
@@ -104,6 +105,11 @@ void update(void) {
     mesh.rotation.y += 0.02;
     mesh.rotation.z += 0.03;
 
+    mesh.scale.y += 0.003;
+    mesh.scale.x += 0.002;
+    mat4_t scaleMatrix = mat4MakeScale(mesh.scale.x,mesh.scale.y,mesh.scale.z);
+
+
     int toWait = FRAME_TARGET_TIME - (SDL_GetTicks() - previousFrame);
     if (toWait > 0 && toWait <= FRAME_TARGET_TIME) {
         SDL_Delay(toWait);
@@ -124,15 +130,17 @@ void update(void) {
         
         //TRANSFORMATION LOOP
         for (unsigned int j = 0; j < 3; ++j) {
-            vec3_t curr = faceVertices[j];
+            vec4_t curr = vec3ToVec4(faceVertices[j]);
 
-            curr = rotateX(curr, mesh.rotation.x);
-            curr = rotateY(curr, mesh.rotation.y);
-            curr = rotateZ(curr, mesh.rotation.z);
+            //curr = rotateX(curr, mesh.rotation.x);
+            //curr = rotateY(curr, mesh.rotation.y);
+            //curr = rotateZ(curr, mesh.rotation.z);
+
+            curr = mat4MulVec4(scaleMatrix, curr);
             
             curr.z += 5;
 
-            transformedVertices[j] = curr;
+            transformedVertices[j] = vec4ToVec3(curr);
         }
 
        if (ENABLE_CULLING) { 

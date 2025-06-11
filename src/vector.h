@@ -14,6 +14,13 @@ typedef struct {
     float z;
 } vec3_t;
 
+typedef struct {
+    float x;
+    float y;
+    float z;
+    float w;
+} vec4_t;
+
 vec3_t rotateX(vec3_t p, float a);
 vec3_t rotateY(vec3_t p, float a);
 vec3_t rotateZ(vec3_t p, float a);
@@ -36,5 +43,9 @@ vec3_t vec3Div(vec3_t v, float sc);
 vec3_t vec3Cross(vec3_t a, vec3_t b);
 float vec3Dot(vec3_t a, vec3_t b);
 void vec3Normalize(vec3_t *a);
+
+/* --- VEC4 Utils --- */
+vec4_t vec3ToVec4(vec3_t);
+vec3_t vec4ToVec3(vec4_t);
 
 #endif
