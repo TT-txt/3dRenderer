@@ -1,5 +1,5 @@
 #include "matrix.h"
-#include <stdio.h>
+#include <math.h>
 
 mat4_t mat4MakeScale(float sx, float sy, float sz) {
     mat4_t m = {{
@@ -12,7 +12,7 @@ mat4_t mat4MakeScale(float sx, float sy, float sz) {
 }
 
 mat4_t mat4Identity(void) {
-    return mat4MakeScale(1, 1, 1);
+    return mat4MakeScale(1.0, 1.0, 1.0);
 }
 
 vec4_t mat4MulVec4(mat4_t m, vec4_t v) {
@@ -30,4 +30,37 @@ mat4_t mat4MakeTranslate(float x, float y, float z) {
     r.m[1][3] = y;
     r.m[2][3] = z;
     return r;
+}
+
+mat4_t mat4MakeXRotation(float a) {
+    float c = cos(a);
+    float s = sin(a);
+    mat4_t m = mat4Identity();
+    m.m[1][1] = c;
+    m.m[1][2] = -s;
+    m.m[2][1] = s;
+    m.m[2][2] = c;
+    return m;
+}
+
+mat4_t mat4MakeYRotation(float a) {
+    float c = cos(a);
+    float s = sin(a);
+    mat4_t m = mat4Identity();
+    m.m[0][0] = c;
+    m.m[0][2] = s;
+    m.m[2][0] = -s;
+    m.m[2][2] = c;
+    return m;
+}
+
+mat4_t mat4MakeZRotation(float a) {
+    float c = cos(a);
+    float s = sin(a);
+    mat4_t m = mat4Identity();
+    m.m[0][0] = c;
+    m.m[0][1] = -s;
+    m.m[1][0] = s;
+    m.m[1][1] = c;
+    return m;
 }

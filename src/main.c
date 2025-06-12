@@ -105,12 +105,17 @@ void update(void) {
     mesh.rotation.y += 0.02;
     mesh.rotation.z += 0.03;
 
-    mesh.scale.y += 0.003;
-    mesh.scale.x += 0.002;
+    //mesh.scale.y += 0.003;
+    //mesh.scale.x += 0.002;
     
-    mesh.translation.x += 0.1;
+    //mesh.translation.x += 0.1;
+    //mesh.translation.y += 0.05;
+    mesh.translation.z = 5.0;
 
     mat4_t scaleMatrix = mat4MakeScale(mesh.scale.x,mesh.scale.y,mesh.scale.z);
+    mat4_t xRotationMatrix = mat4MakeXRotation(mesh.rotation.x);
+    mat4_t yRotationMatrix = mat4MakeYRotation(mesh.rotation.y);
+    mat4_t zRotationMatrix = mat4MakeZRotation(mesh.rotation.z);
     mat4_t translateMatrix = mat4MakeTranslate(mesh.translation.x, mesh.translation.y, mesh.translation.z); 
 
     int toWait = FRAME_TARGET_TIME - (SDL_GetTicks() - previousFrame);
@@ -135,14 +140,11 @@ void update(void) {
         for (unsigned int j = 0; j < 3; ++j) {
             vec4_t curr = vec3ToVec4(faceVertices[j]);
 
-            //curr = rotateX(curr, mesh.rotation.x);
-            //curr = rotateY(curr, mesh.rotation.y);
-            //curr = rotateZ(curr, mesh.rotation.z);
-
-            ///curr = mat4MulVec4(scaleMatrix, curr);
+            curr = mat4MulVec4(scaleMatrix, curr);
+            curr = mat4MulVec4(xRotationMatrix, curr);
+            curr = mat4MulVec4(yRotationMatrix, curr);
+            curr = mat4MulVec4(zRotationMatrix, curr);
             curr = mat4MulVec4(translateMatrix, curr);
-            
-            curr.z += 5;
 
             transformedVertices[j] = vec4ToVec3(curr);
         }
