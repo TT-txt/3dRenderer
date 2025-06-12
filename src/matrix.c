@@ -24,6 +24,19 @@ vec4_t mat4MulVec4(mat4_t m, vec4_t v) {
     return r;
 }
 
+mat4_t mat4MulMat4(mat4_t a, mat4_t b) {
+    mat4_t r;
+    for (unsigned int i = 0; i < 4; ++i) {
+        for (unsigned int j = 0; j < 4; ++j) {
+            r.m[i][j] = 0;
+            for (unsigned int k = 0; k < 4; ++k) {
+                r.m[i][j] += a.m[i][k] * b.m[k][j];
+            }
+        }
+    }
+    return r;
+}
+
 mat4_t mat4MakeTranslate(float x, float y, float z) {
     mat4_t r = mat4Identity();
     r.m[0][3] = x;

@@ -139,12 +139,14 @@ void update(void) {
         //TRANSFORMATION LOOP
         for (unsigned int j = 0; j < 3; ++j) {
             vec4_t curr = vec3ToVec4(faceVertices[j]);
+            mat4_t worldMatrix = mat4Identity();
+            worldMatrix = mat4MulMat4(scaleMatrix, worldMatrix);
+            worldMatrix = mat4MulMat4(zRotationMatrix, worldMatrix);
+            worldMatrix = mat4MulMat4(yRotationMatrix, worldMatrix);
+            worldMatrix = mat4MulMat4(xRotationMatrix, worldMatrix);
+            worldMatrix = mat4MulMat4(translateMatrix, worldMatrix);
 
-            curr = mat4MulVec4(scaleMatrix, curr);
-            curr = mat4MulVec4(xRotationMatrix, curr);
-            curr = mat4MulVec4(yRotationMatrix, curr);
-            curr = mat4MulVec4(zRotationMatrix, curr);
-            curr = mat4MulVec4(translateMatrix, curr);
+            curr = mat4MulVec4(worldMatrix, curr);
 
             transformedVertices[j] = vec4ToVec3(curr);
         }
