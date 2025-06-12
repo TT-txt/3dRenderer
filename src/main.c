@@ -107,8 +107,11 @@ void update(void) {
 
     mesh.scale.y += 0.003;
     mesh.scale.x += 0.002;
-    mat4_t scaleMatrix = mat4MakeScale(mesh.scale.x,mesh.scale.y,mesh.scale.z);
+    
+    mesh.translation.x += 0.1;
 
+    mat4_t scaleMatrix = mat4MakeScale(mesh.scale.x,mesh.scale.y,mesh.scale.z);
+    mat4_t translateMatrix = mat4MakeTranslate(mesh.translation.x, mesh.translation.y, mesh.translation.z); 
 
     int toWait = FRAME_TARGET_TIME - (SDL_GetTicks() - previousFrame);
     if (toWait > 0 && toWait <= FRAME_TARGET_TIME) {
@@ -136,7 +139,8 @@ void update(void) {
             //curr = rotateY(curr, mesh.rotation.y);
             //curr = rotateZ(curr, mesh.rotation.z);
 
-            curr = mat4MulVec4(scaleMatrix, curr);
+            ///curr = mat4MulVec4(scaleMatrix, curr);
+            curr = mat4MulVec4(translateMatrix, curr);
             
             curr.z += 5;
 

@@ -128,7 +128,7 @@ vec4_t vec3ToVec4(vec3_t v){
         .x = v.x,
         .y = v.y,
         .z = v.z,
-        .w = 1
+        .w = 1.0
     };
     return res;
 }
