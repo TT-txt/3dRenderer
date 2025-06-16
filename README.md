@@ -8,8 +8,11 @@ This project is a custom-built 3D renderer written in C, using SDL2 for the GUI 
   - Projects 3D points onto a 2D plane for rendering.
   - Draws lines, rectangles, and triangles to construct 3D objects on the screen.
 - **OBJ File Loading**: Imports `.obj` 3D model files to render complex geometries.
+    - Note that random colors are selected per face, texture implementation will be done later on.
 - **Back-Face Culling**: Uses a basic back-face culling algorithm to optimize rendering by skipping faces that are not visible to the camera.
-- **Triangle Rasterization** *(done, but currently in tweaking)*: rasterization to accurately fill in triangles for solid object rendering.
+- **Triangle Rasterization**: rasterization to accurately fill in triangles for solid object rendering.
+- **Z Buffer** *ongoing - currently using a basic painter algorithm*
+- **4x4 matrix**: Dropped the original backend system to implement a more suited matrix one.
 
 ## Keyboards inputs (WIP)
 - Pressing “1” displays the wireframe and a small red dot for each triangle vertex
