@@ -6,6 +6,10 @@
 #include "triangle.h"
 #include "matrix.h"
 
+#ifndef M_PI
+#define M_PI 3.1415926535
+#endif
+
 //user options
 bool DISPLAY_WIREFRAME = true;
 bool DISPLAY_FACES = true;
@@ -22,10 +26,11 @@ uint32_t wireframeColor = 0xFFFFFFFF;
 triangle_t *trianglesToRender = NULL;
 
 vec3_t camPosition = {.x = 0, .y = 0, .z = 0 };
-float fovFactor = 640;
 
 bool isRunning = false;
 int previousFrame = 0;
+
+mat4_t projMatrix; 
 
 void setup(void) {
     colorBuffer = (uint32_t *) malloc(sizeof(uint32_t) * windowX * windowY);
@@ -45,6 +50,12 @@ void setup(void) {
         fprintf(stderr, "Cannot init the colorBufferTexture.\n");
         isRunning = false;
     }
+
+    float fov = M_PI / 3.0; // 60 deg
+    float aspect = (float) windowY / (float) windowX;
+    float zNear = 0.1;
+    float zFar = 100.0;
+    projMatrix = mat4MakePerspective(fov, aspect, zNear, zFar);
    
     //loadObj("assets/f22.obj");
     loadObj("assets/cube.obj");
@@ -90,14 +101,6 @@ void processInputs(void) {
     }
 }
 
-vec2_t project(vec3_t point) {
-    vec2_t projected = {
-        .x = (fovFactor * point.x) / point.z,
-        .y = (fovFactor * point.y) / point.z
-    };
-    return projected;
-}
-
 void update(void) {
     //lock execution to reach the good framerate - comparing current time and old time
     //while (!SDL_TICKS_PASSED(SDL_GetTicks(), previousFrame + FRAME_TARGET_TIME));
@@ -134,7 +137,7 @@ void update(void) {
         faceVertices[1] = mesh.vertices[currentFace.b - 1];
         faceVertices[2] = mesh.vertices[currentFace.c - 1];
 
-        vec3_t transformedVertices[3];
+        vec4_t transformedVertices[3];
         
         //TRANSFORMATION LOOP
         for (unsigned int j = 0; j < 3; ++j) {
@@ -148,14 +151,14 @@ void update(void) {
 
             curr = mat4MulVec4(worldMatrix, curr);
 
-            transformedVertices[j] = vec4ToVec3(curr);
+            transformedVertices[j] = curr;
         }
 
        if (ENABLE_CULLING) { 
             //check if back is culled
-            vec3_t AB = vec3Sub(transformedVertices[1], transformedVertices[0]);
-            vec3_t AC = vec3Sub(transformedVertices[2], transformedVertices[0]);
-            vec3_t camRay = vec3Sub(camPosition, transformedVertices[0]);
+            vec3_t AB = vec3Sub(vec4ToVec3(transformedVertices[1]), vec4ToVec3(transformedVertices[0]));
+            vec3_t AC = vec3Sub(vec4ToVec3(transformedVertices[2]), vec4ToVec3(transformedVertices[0]));
+            vec3_t camRay = vec3Sub(camPosition, vec4ToVec3(transformedVertices[0]));
             vec3Normalize(&AB);
             vec3Normalize(&AC);
             vec3_t normal = vec3Cross(AB, AC); //if right handed, should be the opposite
@@ -171,11 +174,18 @@ void update(void) {
         triangle_t currentTriangle;
         currentTriangle.averageDepth = 0;
         for (unsigned int j = 0; j < 3; ++j) {
-            vec2_t projectedPoint = project(transformedVertices[j]);
-            projectedPoint.x += (windowX / 2);
-            projectedPoint.y += (windowY / 2);
-             
-            currentTriangle.points[j] = projectedPoint;
+            vec4_t projectedPoint = mat4MulVec4Project(projMatrix, transformedVertices[j]);
+
+            projectedPoint.x *= (windowX / 2.0);
+            projectedPoint.y *= (windowY / 2.0);
+            projectedPoint.x += (windowX / 2.0);
+            projectedPoint.y += (windowY / 2.0);
+
+            vec2_t toAdd = {
+                .x = projectedPoint.x,
+                .y = projectedPoint.y
+            };
+            currentTriangle.points[j] = toAdd;
             currentTriangle.averageDepth += transformedVertices[j].z;
         }
         currentTriangle.averageDepth /= 3.0;

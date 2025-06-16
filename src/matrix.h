@@ -14,5 +14,7 @@ mat4_t mat4MakeTranslate(float, float, float);
 mat4_t mat4MakeXRotation(float); 
 mat4_t mat4MakeYRotation(float); 
 mat4_t mat4MakeZRotation(float); 
+mat4_t mat4MakePerspective(float, float, float, float);
+vec4_t mat4MulVec4Project(mat4_t, vec4_t);
 
 #endif

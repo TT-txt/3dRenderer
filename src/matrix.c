@@ -77,3 +77,25 @@ mat4_t mat4MakeZRotation(float a) {
     m.m[1][1] = c;
     return m;
 }
+
+
+mat4_t mat4MakePerspective(float fov, float aspect, float znear, float zfar) {
+    mat4_t m = {{{ 0 }}};
+    m.m[0][0] = aspect * (1 / tan(fov / 2));
+    m.m[1][1] = 1 / tan(fov / 2);
+    m.m[2][2] = zfar / (zfar - znear);
+    m.m[2][3] = (-zfar * znear) / (zfar - znear);
+    m.m[3][2] = 1.0; //backing up the original z value
+    return m;
+}
+
+
+vec4_t mat4MulVec4Project(mat4_t m, vec4_t v) {
+    vec4_t r = mat4MulVec4(m, v);
+    if (r.w != 0.0) {
+        r.x /= r.w;
+        r.y /= r.w;
+        r.z /= r.w;
+    }
+    return r;
+}
